@@ -2,6 +2,17 @@
   import { onMount } from 'svelte';
   import Chart from 'chart.js/auto';
 
+
+  let currentTime = getCurrentTime();
+
+  function getCurrentTime() {
+    const date = new Date();
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${hours}:${minutes}`;
+  }
+
+
   let data: any[] = [];
   let dailyMin = '';
   let currentPrice = '';
@@ -266,6 +277,9 @@
         <p class="price">{dailyMax} / MWh</p>
         <p class="caption">Denní max</p>
         <p class="time">15:00 - 16:00</p>
+      </div>
+      <div>
+        <p class="time">Aktuální čas: {currentTime}</p>
       </div>
     </div>
     <canvas id="chart" class="chartjs-render-monitor"></canvas>
