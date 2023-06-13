@@ -1,0 +1,194 @@
+[
+    {
+        "Hodina": "1",
+        "Eur/MWH": "89.11",
+        "Množství": "2334.3",
+        "Export": "605",
+        "Import": "-186.9",
+        "Saldo": "418.1"
+    },
+    {
+        "Hodina": "2",
+        "Eur/MWH": "82.78",
+        "Množství": "2093.9",
+        "Export": "506.9",
+        "Import": "-376",
+        "Saldo": "130.9"
+    },
+    {
+        "Hodina": "3",
+        "Eur/MWH": "83.29",
+        "Množství": "2188.2",
+        "Export": "507",
+        "Import": "-284.3",
+        "Saldo": "222.7"
+    },
+    {
+        "Hodina": "4",
+        "Eur/MWH": "82.75",
+        "Množství": "2224.2",
+        "Export": "593.3",
+        "Import": "-311",
+        "Saldo": "282.3"
+    },
+    {
+        "Hodina": "5",
+        "Eur/MWH": "84.77",
+        "Množství": "2202.2",
+        "Export": "635.7",
+        "Import": "-302.5",
+        "Saldo": "333.2"
+    },
+    {
+        "Hodina": "6",
+        "Eur/MWH": "90.04",
+        "Množství": "2331.7",
+        "Export": "670.2",
+        "Import": "-319.5",
+        "Saldo": "350.7"
+    },
+    {
+        "Hodina": "7",
+        "Eur/MWH": "113.22",
+        "Množství": "2889",
+        "Export": "1561.5",
+        "Import": "-1134.2",
+        "Saldo": "427.3"
+    },
+    {
+        "Hodina": "8",
+        "Eur/MWH": "119.34",
+        "Množství": "2922.2",
+        "Export": "1717.5",
+        "Import": "-1441",
+        "Saldo": "276.5"
+    },
+    {
+        "Hodina": "9",
+        "Eur/MWH": "120.04",
+        "Množství": "2979.1",
+        "Export": "1290.7",
+        "Import": "-989.5",
+        "Saldo": "301.2"
+    },
+    {
+        "Hodina": "10",
+        "Eur/MWH": "103.12",
+        "Množství": "2921.5",
+        "Export": "643.9",
+        "Import": "-472",
+        "Saldo": "171.9"
+    },
+    {
+        "Hodina": "11",
+        "Eur/MWH": "85.08",
+        "Množství": "2949.8",
+        "Export": "445",
+        "Import": "-190.4",
+        "Saldo": "254.6"
+    },
+    {
+        "Hodina": "12",
+        "Eur/MWH": "77.71",
+        "Množství": "2855.9",
+        "Export": "479.7",
+        "Import": "-1049.5",
+        "Saldo": "-569.8"
+    },
+    {
+        "Hodina": "13",
+        "Eur/MWH": "67.81",
+        "Množství": "3247.8",
+        "Export": "284.2",
+        "Import": "-1456.9",
+        "Saldo": "-1172.7"
+    },
+    {
+        "Hodina": "14",
+        "Eur/MWH": "64.98",
+        "Množství": "3308.5",
+        "Export": "288.8",
+        "Import": "-1609.6",
+        "Saldo": "-1320.8"
+    },
+    {
+        "Hodina": "15",
+        "Eur/MWH": "63.02",
+        "Množství": "3195.5",
+        "Export": "469.1",
+        "Import": "-1767",
+        "Saldo": "-1297.9"
+    },
+    {
+        "Hodina": "16",
+        "Eur/MWH": "69.61",
+        "Množství": "2876.1",
+        "Export": "549.9",
+        "Import": "-1712.2",
+        "Saldo": "-1162.3"
+    },
+    {
+        "Hodina": "17",
+        "Eur/MWH": "78.01",
+        "Množství": "2683.2",
+        "Export": "609.1",
+        "Import": "-1407.7",
+        "Saldo": "-798.6"
+    },
+    {
+        "Hodina": "18",
+        "Eur/MWH": "85.01",
+        "Množství": "2605.1",
+        "Export": "775.6",
+        "Import": "-999.5",
+        "Saldo": "-223.9"
+    },
+    {
+        "Hodina": "19",
+        "Eur/MWH": "105.2",
+        "Množství": "2524",
+        "Export": "591.7",
+        "Import": "-602.9",
+        "Saldo": "-11.2"
+    },
+    {
+        "Hodina": "20",
+        "Eur/MWH": "123.45",
+        "Množství": "2782.1",
+        "Export": "1096.8",
+        "Import": "-809",
+        "Saldo": "287.8"
+    },
+    {
+        "Hodina": "21",
+        "Eur/MWH": "130.25",
+        "Množství": "3026.9",
+        "Export": "1139.3",
+        "Import": "-555.7",
+        "Saldo": "583.6"
+    },
+    {
+        "Hodina": "22",
+        "Eur/MWH": "114.96",
+        "Množství": "2922.8",
+        "Export": "734.3",
+        "Import": "-205.4",
+        "Saldo": "528.9"
+    },
+    {
+        "Hodina": "23",
+        "Eur/MWH": "105",
+        "Množství": "2807.1",
+        "Export": "706.5",
+        "Import": "-87.4",
+        "Saldo": "619.1"
+    },
+    {
+        "Hodina": "24",
+        "Eur/MWH": "98.38",
+        "Množství": "2823.9",
+        "Export": "872.9",
+        "Import": "-11.3",
+        "Saldo": "861.6"
+    }
+]
