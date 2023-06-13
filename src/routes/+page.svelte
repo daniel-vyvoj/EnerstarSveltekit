@@ -65,11 +65,36 @@
     padding: 2rem;
   }
 
+  /* Celý box */
+  .chart-container {
+    width: 1017px;
+    height: 539px;
+    margin: 0 auto;
+    background: #003A42;
+    border-radius: 56px;
+    position: relative;
+  }
+
+  /* Obdélník nad grafem */
+  .rectangle {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 16px;
+    gap: 40px;
+    width: 909px;
+    height: 104px;
+    background: #004852;
+    border-radius: 16px;
+    margin: 87px auto 0;
+  }
+
   /* Sloupcový graf */
   .chartjs-render-monitor {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
+    width: 100%;
+    height: 400px;
+    margin-top: 20px;
   }
 
   .chartjs-render-monitor > div {
@@ -92,17 +117,56 @@
     transform: matrix(1, 0, 0, -1, 0, 0);
   }
 
-  /* Obalový box */
-  main {
-    position: relative;
-    width: 1017px;
-    height: 539px;
-    margin-left: auto;
-    margin-right: auto;
-    background: #003A42;
-    border-radius: 56px;
+  /* Styly textu */
+  .price {
+    font-family: 'Euclid Circular A';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 30px;
+    letter-spacing: -0.02em;
+    font-variant: small-caps;
+    color: #baf400; /* Lemon green/500 - (BASE) */
+  }
+
+  .caption {
+    font-family: 'Euclid Circular A';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 150%;
+    color: #ffffff; /* System/Gray/White */
+  }
+
+  .time {
+    font-family: 'Euclid Circular A';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 150%;
+    color: #baf400; /* Lemon green/500 - (BASE) */
   }
 </style>
+
 <main>
-  <canvas id="chart" width="600" height="400"></canvas>
+  <div class="chart-container">
+    <div class="rectangle">
+      <div>
+        <p class="price">Bude - Cena / MWh</p>
+        <p class="caption">Denni min</p>
+        <p class="time">00:00 - 01:00</p>
+      </div>
+      <div>
+        <p class="price">Cena / MWh</p>
+        <p class="caption">Aktuální Cena</p>
+        <p class="time">10:00 - 11:00</p>
+      </div>
+      <div>
+        <p class="price">Cena / MWh</p>
+        <p class="caption">Denní Max</p>
+        <p class="time">15:00 - 16:00</p>
+      </div>
+    </div>
+    <canvas id="chart" class="chartjs-render-monitor"></canvas>
+  </div>
 </main>
