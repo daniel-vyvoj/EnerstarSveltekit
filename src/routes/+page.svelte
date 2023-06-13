@@ -75,7 +75,7 @@
               label: {
                 enabled: true,
                 content: dailyMin,
-                backgroundColor: 'black',
+                backgroundColor: 'transparent',
                 font: {
                   family: 'Euclid Circular A',
                   size: 12,
@@ -166,76 +166,36 @@
 
   /* Přidejte vlastní styly */
   main {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 2rem;
+    height: 100vh; /* Nastaví výšku na 100% výšky viewportu */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #003A42; /* Pozadí celé stránky */
   }
 
   /* Celý box */
-
+  .chart-container {
+    width: 1017px;
+    height: 539px;
+    background: #003A42;
+    border-radius: 56px;
+    position: relative;
+  }
 
   /* Obdélník nad grafem */
   .rectangle {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px;
-  width: 909px;
-  height: 104px;
-  background: #004852;
-  border-radius: 16px;
-  margin: 87px auto 0;
-}
-
-.spot-heading {
-  width: 129px;
-  height: 28px;
-  font-family: 'Euclid Circular A';
-  font-style: normal;
-  font-weight: 500;
-  font-size: 20px;
-  line-height: 140%;
-  color: #FFFFFF; /* System/Gray/White */
-}
-
-.spot-heading:before {
-  content: '';
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  background-color: #FFFFFF; /* System/Gray/White */
-  border-radius: 50%;
-  margin-right: 8px;
-}
-
-.spot-date-arrow {
-  display: flex;
-  align-items: center;
-}
-
-.spot-date-arrow:before {
-  content: '';
-  display: inline-block;
-  width: 6px;
-  height: 6px;
-  border-top: 2px solid #FFFFFF; /* System/Gray/White */
-  border-right: 2px solid #FFFFFF; /* System/Gray/White */
-  transform: rotate(45deg);
-  margin-right: 8px;
-}
-
-.spot-date {
-  font-family: 'Euclid Circular A';
-  font-style: normal;
-  font-weight: 500;
-  font-size: 12px;
-  line-height: 15px;
-  color: #FFFFFF; /* System/Gray/White */
-}
-
-.spot-date-arrow.right {
-  flex-direction: row-reverse;
-}
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 16px;
+    gap: 40px;
+    width: 909px;
+    height: 104px;
+    background: #004852;
+    border-radius: 16px;
+    margin: 87px auto 0;
+  }
 
   /* Sloupcový graf */
   .chartjs-render-monitor {
@@ -274,32 +234,26 @@
     color: #baf400; /* Lemon green/500 - (BASE) */
   }
 
-  .chartjs-render-monitor >div {
+  .chartjs-render-monitor > div {
     position: absolute;
     width: 29px;
     height: 15px;
-    left: 0;
-    top: 0;
+    left: 0px;
+    top: 0px;
     font-family: 'Euclid Circular A';
     font-style: normal;
     font-weight: 500;
     font-size: 12px;
     line-height: 15px;
-    color: #baf400; /* Lemon green/500 - (BASE) */
+    color: #baf400; /* Leon green/500 - (BASE) */
   }
-
 </style>
 
 <main>
   <div class="chart-container">
-    <div class="spot-heading">
-      <span class="spot-date-arrow"></span>
-      Spotové ceny
-      <span class="spot-date-arrow right"></span>
-    </div>
     <div class="rectangle">
       <div>
-        <p class="price">{dailyMin} / MWh</p>
+        <p class="price">{dailyMin} /  MWh</p>
         <p class="caption">Denní min</p>
         <p class="time">00:00 - 01:00</p>
       </div>
