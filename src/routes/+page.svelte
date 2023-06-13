@@ -25,7 +25,7 @@ setInterval(() => {
 
   onMount(async () => {
     try {
-      const response = await fetch('/src/DataCen.json');
+      const response = await fetch('/DataCen.json');
       data = await response.json();
 
       dailyMin = calculateDailyMin(data);
