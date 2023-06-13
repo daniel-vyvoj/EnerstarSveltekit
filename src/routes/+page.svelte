@@ -56,6 +56,78 @@
           beginAtZero: true,
         },
       },
+      plugins: {
+        tooltip: {
+          enabled: true, // Vypnutí tooltipu
+        },
+        legend: {
+          display: true, // Skrytí legendy
+        },
+        annotation: {
+          annotations: [
+            {
+              type: 'line',
+              mode: 'horizontal',
+              scaleID: 'y',
+              value: parseFloat(dailyMin),
+              borderColor: '#baf400',
+              borderWidth: 1,
+              label: {
+                enabled: true,
+                content: dailyMin,
+                backgroundColor: 'black',
+                font: {
+                  family: 'Euclid Circular A',
+                  size: 12,
+                  weight: 500,
+                  color: '#baf400',
+                },
+                yAdjust: -12, // Posunutí textu nahoru
+              },
+            },
+            {
+              type: 'line',
+              mode: 'horizontal',
+              scaleID: 'y',
+              value: parseFloat(currentPrice),
+              borderColor: '#baf400',
+              borderWidth: 1,
+              label: {
+                enabled: true,
+                content: currentPrice,
+                backgroundColor: 'transparent',
+                font: {
+                  family: 'Euclid Circular A',
+                  size: 12,
+                  weight: 500,
+                  color: '#baf400',
+                },
+                yAdjust: -12, // Posunutí textu nahoru
+              },
+            },
+            {
+              type: 'line',
+              mode: 'horizontal',
+              scaleID: 'y',
+              value: parseFloat(dailyMax),
+              borderColor: '#baf400',
+              borderWidth: 1,
+              label: {
+                enabled: true,
+                content: dailyMax,
+                backgroundColor: 'transparent',
+                font: {
+                  family: 'Euclid Circular A',
+                  size: 12,
+                  weight: 500,
+                  color: '#baf400',
+                },
+                yAdjust: -12, // Posunutí textu nahoru
+              },
+            },
+          ],
+        },
+      },
     };
 
     const ctx = document.getElementById('chart');
@@ -92,7 +164,6 @@
   @import 'tailwindcss/tailwind.css';
   @import url('https://fonts.googleapis.com/css2?family=Euclid+Circular+A:wght@400;600&display=swap');
 
-
   /* Přidejte vlastní styly */
   main {
     max-width: 600px;
@@ -101,55 +172,76 @@
   }
 
   /* Celý box */
-  .chart-container {
-    width: 1017px;
-    height: 539px;
-    margin: 0 auto;
-    background: #003A42;
-    border-radius: 56px;
-    position: relative;
-  }
+
 
   /* Obdélník nad grafem */
   .rectangle {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding: 16px;
-    gap: 40px;
-    width: 909px;
-    height: 104px;
-    background: #004852;
-    border-radius: 16px;
-    margin: 87px auto 0;
-  }
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  width: 909px;
+  height: 104px;
+  background: #004852;
+  border-radius: 16px;
+  margin: 87px auto 0;
+}
+
+.spot-heading {
+  width: 129px;
+  height: 28px;
+  font-family: 'Euclid Circular A';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 140%;
+  color: #FFFFFF; /* System/Gray/White */
+}
+
+.spot-heading:before {
+  content: '';
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background-color: #FFFFFF; /* System/Gray/White */
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.spot-date-arrow {
+  display: flex;
+  align-items: center;
+}
+
+.spot-date-arrow:before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-top: 2px solid #FFFFFF; /* System/Gray/White */
+  border-right: 2px solid #FFFFFF; /* System/Gray/White */
+  transform: rotate(45deg);
+  margin-right: 8px;
+}
+
+.spot-date {
+  font-family: 'Euclid Circular A';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 15px;
+  color: #FFFFFF; /* System/Gray/White */
+}
+
+.spot-date-arrow.right {
+  flex-direction: row-reverse;
+}
 
   /* Sloupcový graf */
   .chartjs-render-monitor {
     width: 909px;
     height: 400px;
     margin: 20px auto 0;
-  }
-
-  .chartjs-render-monitor > div {
-    width: 24px;
-    height: 43px;
-    background: linear-gradient(180deg, #8DC63F 0%, rgba(141, 198, 63, 0.3) 100%);
-    border: 1px solid #000000;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 8px 8px 0px 0px;
-    transform: matrix(-1, 0, 0, 1, 0, 0);
-    flex: none;
-    order: 0;
-    flex-grow: 0;
-  }
-
-  .chartjs-render-monitor > div.negative {
-    height: 74px;
-    background: linear-gradient(180deg, #FF5C60 0%, rgba(255, 92, 96, 0.3) 100%);
-    border-radius: 8px 8px 0px 0px;
-    transform: matrix(1, 0, 0, -1, 0, 0);
   }
 
   /* Styly textu */
@@ -181,26 +273,47 @@
     line-height: 150%;
     color: #baf400; /* Lemon green/500 - (BASE) */
   }
+
+  .chartjs-render-monitor >div {
+    position: absolute;
+    width: 29px;
+    height: 15px;
+    left: 0;
+    top: 0;
+    font-family: 'Euclid Circular A';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 15px;
+    color: #baf400; /* Lemon green/500 - (BASE) */
+  }
+
 </style>
 
 <main>
-<div class="chart-container">
-  <div class="rectangle">
-    <div>
-      <p class="price">{dailyMin} /  MWh</p>
-      <p class="caption">Denní min </p>
-      <p class="time">00:00 - 01:00</p>
+  <div class="chart-container">
+    <div class="spot-heading">
+      <span class="spot-date-arrow"></span>
+      Spotové ceny
+      <span class="spot-date-arrow right"></span>
     </div>
-    <div>
-      <p class="price">{currentPrice} / MWh</p>
-      <p class="caption">Aktuální cena </p>
-      <p class="time">10:00 - 11:00</p>
+    <div class="rectangle">
+      <div>
+        <p class="price">{dailyMin} / MWh</p>
+        <p class="caption">Denní min</p>
+        <p class="time">00:00 - 01:00</p>
+      </div>
+      <div>
+        <p class="price">{currentPrice} / MWh</p>
+        <p class="caption">Aktuální cena</p>
+        <p class="time">10:00 - 11:00</p>
+      </div>
+      <div>
+        <p class="price">{dailyMax} / MWh</p>
+        <p class="caption">Denní max</p>
+        <p class="time">15:00 - 16:00</p>
+      </div>
     </div>
-    <div>
-      <p class="price">{dailyMax} / MWh</p>
-      <p class="caption">Denní max </p>
-      <p class="time">15:00 - 16:00</p>
-    </div>
+    <canvas id="chart" class="chartjs-render-monitor"></canvas>
   </div>
-  <canvas id="chart" class="chartjs-render-monitor"></canvas>
 </main>
