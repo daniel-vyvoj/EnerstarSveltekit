@@ -245,7 +245,7 @@
     font-weight: 500;
     font-size: 12px;
     line-height: 15px;
-    color: #baf400; /* Leon green/500 - (BASE) */
+    color: #baf400; /* Lemon green/500 - (BASE) */
   }
 </style>
 
