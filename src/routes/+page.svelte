@@ -2,61 +2,96 @@
   import { onMount } from 'svelte';
   import Chart from 'chart.js/auto';
 
-  let data = [];
+  let data: any[] = [];
+  let dailyMin = '';
+  let currentPrice = '';
+  let dailyMax = '';
 
   onMount(async () => {
     try {
-      const response = await fetch('/src/DataCen.json'); // cesta k souboru DataCen.json
+      const response = await fetch('/src/DataCen.json');
       data = await response.json();
 
-      const ctx = document.getElementById('chart');
-      if (ctx) {
-        new Chart(ctx, {
-          type: 'bar', // Sloupcový graf
-          data: {
-            labels: data.map((item) => item.Hodina),
-            datasets: [
-              {
-                label: 'Ceny za 24 hodin',
-                data: data.map((item) => {
-                  const priceEuro = parseFloat(item['Eur/MWH']);
-                  const exchangeRate = 25; // Předpokládaný kurz EUR/CZK
-                  const priceCZK = priceEuro * exchangeRate;
-                  return priceCZK;
-                }),
-                backgroundColor: data.map((item) => {
-                  const price = parseFloat(item['Eur/MWH']);
-                  if (price >= 0) {
-                    return '#8DC63F'; // Zelená barva pro pozitivní ceny
-                  } else {
-                    return '#FF5C60'; // Červená barva pro negativní ceny
-                  }
-                }),
-                borderColor: '#000000',
-                borderWidth: 1,
-                borderRadius: 8,
-              },
-            ],
-          },
-          options: {
-            responsive: true,
-            scales: {
-              y: {
-                beginAtZero: true,
-              },
-            },
-          },
-        });
-      }
+      dailyMin = calculateDailyMin(data);
+      currentPrice = calculateCurrentPrice(data);
+      dailyMax = calculateDailyMax(data);
+
+      renderChart();
     } catch (error) {
       console.error('Chyba při načítání dat:', error);
     }
   });
+
+  function renderChart() {
+    const chartData = {
+      labels: data.map((item) => item.Hodina),
+      datasets: [
+        {
+          label: 'Ceny za 24 hodin',
+          data: data.map((item) => {
+            const priceEuro = parseFloat(item['Eur/MWH']);
+            const exchangeRate = 25; // Předpokládaný kurz EUR/CZK
+            const priceCZK = priceEuro * exchangeRate;
+            return priceCZK;
+          }),
+          backgroundColor: data.map((item) => {
+            const price = parseFloat(item['Eur/MWH']);
+            if (price >= 0) {
+              return '#8DC63F'; // Zelená barva pro pozitivní ceny
+            } else {
+              return '#FF5C60'; // Červená barva pro negativní ceny
+            }
+          }),
+          borderColor: '#000000',
+          borderWidth: 1,
+          borderRadius: 8,
+        },
+      ],
+    };
+
+    const chartOptions = {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true,
+        },
+      },
+    };
+
+    const ctx = document.getElementById('chart');
+    if (ctx) {
+      new Chart(ctx, {
+        type: 'bar',
+        data: chartData,
+        options: chartOptions,
+      });
+    }
+  }
+
+  function calculateDailyMin(data: any[]) {
+    const prices = data.map((item) => parseFloat(item['Eur/MWH']));
+    const minPrice = Math.min(...prices);
+    return minPrice.toFixed(2);
+  }
+
+  function calculateCurrentPrice(data: any[]) {
+    const currentHour = new Date().getHours();
+    const currentPrice = parseFloat(data[currentHour - 1]['Eur/MWH']);
+    return currentPrice.toFixed(2);
+  }
+
+  function calculateDailyMax(data: any[]) {
+    const prices = data.map((item) => parseFloat(item['Eur/MWH']));
+    const maxPrice = Math.max(...prices);
+    return maxPrice.toFixed(2);
+  }
 </script>
 
 <style>
   /* Importujte Tailwind CSS */
   @import 'tailwindcss/tailwind.css';
+  @import url('https://fonts.googleapis.com/css2?family=Euclid+Circular+A:wght@400;600&display=swap');
+
 
   /* Přidejte vlastní styly */
   main {
@@ -92,9 +127,9 @@
 
   /* Sloupcový graf */
   .chartjs-render-monitor {
-    width: 100%;
+    width: 909px;
     height: 400px;
-    margin-top: 20px;
+    margin: 20px auto 0;
   }
 
   .chartjs-render-monitor > div {
@@ -149,24 +184,22 @@
 </style>
 
 <main>
-  <div class="chart-container">
-    <div class="rectangle">
-      <div>
-        <p class="price">Bude - Cena / MWh</p>
-        <p class="caption">Denni min</p>
-        <p class="time">00:00 - 01:00</p>
-      </div>
-      <div>
-        <p class="price">Cena / MWh</p>
-        <p class="caption">Aktuální Cena</p>
-        <p class="time">10:00 - 11:00</p>
-      </div>
-      <div>
-        <p class="price">Cena / MWh</p>
-        <p class="caption">Denní Max</p>
-        <p class="time">15:00 - 16:00</p>
-      </div>
+  <div class="rectangle">
+    <div>
+      <p class="price">{dailyMin} /  MWh</p>
+      <p class="caption">Denní min </p>
+      <p class="time">00:00 - 01:00</p>
     </div>
-    <canvas id="chart" class="chartjs-render-monitor"></canvas>
+    <div>
+      <p class="price">{currentPrice} / MWh</p>
+      <p class="caption">Aktuální cena </p>
+      <p class="time">10:00 - 11:00</p>
+    </div>
+    <div>
+      <p class="price">{dailyMax} / MWh</p>
+      <p class="caption">Denní max </p>
+      <p class="time">15:00 - 16:00</p>
+    </div>
   </div>
+  <canvas id="chart" class="chartjs-render-monitor"></canvas>
 </main>
