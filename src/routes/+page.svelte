@@ -184,6 +184,7 @@
 </style>
 
 <main>
+<div class="chart-container">
   <div class="rectangle">
     <div>
       <p class="price">{dailyMin} /  MWh</p>
