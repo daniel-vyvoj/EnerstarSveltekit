@@ -237,7 +237,7 @@ function calculateDailyMax(data: any[]): string {
         </div>
       </div>
       <div class="flex gap-3">
-        <p class="text-white">{currentTime}</p>
+        <p class="text-white mt-2">{currentTime}</p>
         <button class="font-euclid_circular_a inline-flex items-center justify-center gap-3 rounded-[9000px] hover:bg-[#BAF400] bg-[#14142B] px-4 py-2.5 font-normal text-[#FCFCFC] transition-all">
           <p class="text-sm leading-normal ">Graf</p>
         </button>
