@@ -4,6 +4,8 @@ import Chart from 'chart.js/auto';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/database';
 
+
+
 const firebaseConfig = {
   apiKey: "AIzaSyAh5RVRAAmRT8UwIogGlY2AtDZUKcULFgk",
     authDomain: "enerstav.firebaseapp.com",
@@ -106,9 +108,11 @@ function renderChart() {
         enabled: true, // Vypnutí tooltipu
       },
       legend: {
-        display: true, labels: {
-      color: '#baf400', // Barva textu legendy
-    }, // Skrytí legendy
+        display: true,
+        labels: {
+          color: '#baf400', // Barva textu legendy
+        },
+        // Skrytí legendy
       },
       annotation: {
         annotations: [
@@ -173,6 +177,35 @@ function renderChart() {
             },
           },
         ],
+
+        drawTime: 'beforeDatasetsDraw', // Kreslení anotací před vykreslením sloupců
+
+        // Vlastní kreslení sloupců
+        drawCustomBars: true,
+        customBarDraw: (ctx, { datasetIndex, element }) => {
+          const dataset = chartData.datasets[datasetIndex];
+          const barValue = dataset.data[element.index];
+
+          const x = element.x;
+          const y = element.y;
+          const base = element.base;
+          const width = element.width;
+          const height = element.height;
+
+          ctx.save();
+
+          if (barValue >= 0) {
+            // Vlastní styl sloupce
+            ctx.fillStyle = 'rgba(141,198,63,1)'; // Zelená barva pro pozitivní ceny
+            ctx.fillRect(x, y, width, height);
+          } else {
+            // Původní styl pro negativní ceny
+            ctx.fillStyle = dataset.backgroundColor;
+            ctx.fillRect(x, base, width, y - base);
+          }
+
+          ctx.restore();
+        },
       },
     },
   };
@@ -299,7 +332,5 @@ function calculateDailyMax(data: any[]): string {
 
 
  <style>
-#chart {
-  background-color: transparent;
-}
+
  </style>
