@@ -1,297 +1,75 @@
-<script lang="ts">
-  import { onMount } from 'svelte';
-  import Chart from 'chart.js/auto';
-
-
-  let currentTime = getCurrentTime();
-
-function getCurrentTime() {
-  const date = new Date();
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-  const seconds = String(date.getSeconds()).padStart(2, '0');
-  return `${hours}:${minutes}:${seconds}`;
-}
-
-// Aktualizace času každou sekundu
-setInterval(() => {
-  currentTime = getCurrentTime();
-}, 1000);
-
-  let data: any[] = [];
-  let dailyMin = '';
-  let currentPrice = '';
-  let dailyMax = '';
-
-  onMount(async () => {
-    try {
-      const response = await fetch('/src/DataCen.json');
-      data = await response.json();
-
-      dailyMin = calculateDailyMin(data);
-      currentPrice = calculateCurrentPrice(data);
-      dailyMax = calculateDailyMax(data);
-
-      renderChart();
-    } catch (error) {
-      console.error('Chyba při načítání dat:', error);
-    }
-  });
-
-  function renderChart() {
-    const chartData = {
-      labels: data.map((item) => item.Hodina),
-      datasets: [
-        {
-          label: 'Ceny za 24 hodin',
-          data: data.map((item) => {
-            const priceEuro = parseFloat(item['Eur/MWH']);
-            const exchangeRate = 25; // Předpokládaný kurz EUR/CZK
-            const priceCZK = priceEuro * exchangeRate;
-            return priceCZK;
-          }),
-          backgroundColor: data.map((item) => {
-            const price = parseFloat(item['Eur/MWH']);
-            if (price >= 0) {
-              return '#8DC63F'; // Zelená barva pro pozitivní ceny
-            } else {
-              return '#FF5C60'; // Červená barva pro negativní ceny
-            }
-          }),
-          borderColor: '#000000',
-          borderWidth: 1,
-          borderRadius: 8,
-        },
-      ],
-    };
-
-    const chartOptions = {
-      responsive: true,
-      scales: {
-        y: {
-          beginAtZero: true,
-        },
-      },
-      plugins: {
-        tooltip: {
-          enabled: true, // Vypnutí tooltipu
-        },
-        legend: {
-          display: true, // Skrytí legendy
-        },
-        annotation: {
-          annotations: [
-            {
-              type: 'line',
-              mode: 'horizontal',
-              scaleID: 'y',
-              value: parseFloat(dailyMin),
-              borderColor: '#baf400',
-              borderWidth: 1,
-              label: {
-                enabled: true,
-                content: dailyMin,
-                backgroundColor: 'transparent',
-                font: {
-                  family: 'Euclid Circular A',
-                  size: 12,
-                  weight: 500,
-                  color: '#baf400',
-                },
-                yAdjust: -12, // Posunutí textu nahoru
-              },
-            },
-            {
-              type: 'line',
-              mode: 'horizontal',
-              scaleID: 'y',
-              value: parseFloat(currentPrice),
-              borderColor: '#baf400',
-              borderWidth: 1,
-              label: {
-                enabled: true,
-                content: currentPrice,
-                backgroundColor: 'transparent',
-                font: {
-                  family: 'Euclid Circular A',
-                  size: 12,
-                  weight: 500,
-                  color: '#baf400',
-                },
-                yAdjust: -12, // Posunutí textu nahoru
-              },
-            },
-            {
-              type: 'line',
-              mode: 'horizontal',
-              scaleID: 'y',
-              value: parseFloat(dailyMax),
-              borderColor: '#baf400',
-              borderWidth: 1,
-              label: {
-                enabled: true,
-                content: dailyMax,
-                backgroundColor: 'transparent',
-                font: {
-                  family: 'Euclid Circular A',
-                  size: 12,
-                  weight: 500,
-                  color: '#baf400',
-                },
-                yAdjust: -12, // Posunutí textu nahoru
-              },
-            },
-          ],
-        },
-      },
-    };
-
-    const ctx = document.getElementById('chart');
-    if (ctx) {
-      new Chart(ctx, {
-        type: 'bar',
-        data: chartData,
-        options: chartOptions,
-      });
-    }
-  }
-
-  function calculateDailyMin(data: any[]) {
-    const prices = data.map((item) => parseFloat(item['Eur/MWH']));
-    const minPrice = Math.min(...prices);
-    return minPrice.toFixed(2);
-  }
-
-  function calculateCurrentPrice(data: any[]) {
-    const currentHour = new Date().getHours();
-    const currentPrice = parseFloat(data[currentHour - 1]['Eur/MWH']);
-    return currentPrice.toFixed(2);
-  }
-
-  function calculateDailyMax(data: any[]) {
-    const prices = data.map((item) => parseFloat(item['Eur/MWH']));
-    const maxPrice = Math.max(...prices);
-    return maxPrice.toFixed(2);
-  }
-</script>
-
-<style>
-  /* Importujte Tailwind CSS */
-  @import 'tailwindcss/tailwind.css';
-  @import url('https://fonts.googleapis.com/css2?family=Euclid+Circular+A:wght@400;600&display=swap');
-
-  /* Přidejte vlastní styly */
-  main {
-    height: 100vh; /* Nastaví výšku na 100% výšky viewportu */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #003A42; /* Pozadí celé stránky */
-  }
-
-  /* Celý box */
-  .chart-container {
-    width: 1017px;
-    height: 539px;
-    background: #003A42;
-    border-radius: 56px;
-    position: relative;
-  }
-
-  /* Obdélník nad grafem */
-  .rectangle {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding: 16px;
-    gap: 40px;
-    width: 909px;
-    height: 104px;
-    background: #004852;
-    border-radius: 16px;
-    margin: 87px auto 0;
-  }
-
-  /* Sloupcový graf */
-  .chartjs-render-monitor {
-    width: 909px;
-    height: 400px;
-    margin: 20px auto 0;
-  }
-
-  /* Styly textu */
-  .price {
-    font-family: 'Euclid Circular A';
-    font-style: normal;
-    font-weight: 600;
-    font-size: 18px;
-    line-height: 30px;
-    letter-spacing: -0.02em;
-    font-variant: small-caps;
-    color: #baf400; /* Lemon green/500 - (BASE) */
-  }
-
-  .caption {
-    font-family: 'Euclid Circular A';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 150%;
-    color: #ffffff; /* System/Gray/White */
-  }
-
-  .time {
-    font-family: 'Euclid Circular A';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 150%;
-    color: #baf400; /* Lemon green/500 - (BASE) */
-  }
-
-  .chartjs-render-monitor > div {
-    position: absolute;
-    width: 29px;
-    height: 15px;
-    left: 0px;
-    top: 0px;
-    font-family: 'Euclid Circular A';
-    font-style: normal;
-    font-weight: 500;
-    font-size: 12px;
-    line-height: 15px;
-    color: #baf400; /* Lemon green/500 - (BASE) */
-  }
-</style>
-
-<main>
-  <div class="chart-container">
-    <div class="rectangle">
-      <div>
-        <p class="price">{dailyMin} /  MWh</p>
-        <p class="caption">Denní min</p>
-        <p class="time">00:00 - 01:00</p>
-      </div>
-      <div>
-        <p class="price">{currentPrice} / MWh</p>
-        <p class="caption">Aktuální cena</p>
-        <p class="time">10:00 - 11:00</p>
-      </div>
-      <div>
-        <p class="price">{dailyMax} / MWh</p>
-        <p class="caption">Denní max</p>
-        <p class="time">15:00 - 16:00</p>
-      </div>
-      <div class="flex flex-col items-center justify-center">
-        <p class="time">Aktuální čas: {currentTime}</p>
-        <div class="flex gap-2">
-          <button class="button-right bg-green-500 rounded-full text-white" style="background-color: #14142B; padding: 4px 12px;">GRAF</button>
-          <button class="button-right bg-green-500 rounded-full" style="background-color: #BAF400; padding: 4px 12px;">Tabulka</button>
+<div class="flex justify-center items-center h-screen">
+  <div class="table bg-[#003941] h-[544px] w-[1020px] rounded-[56px] px-5 py-5">
+    <!-- Horní část -->
+    <div class="flex items-center justify-between">
+      <div class="flex gap-8">
+        <p class="font-euclid_circular_a text-xl leading-[1.4] text-white">Spotové ceny</p>
+        <div class="flex gap-6">
+          <button class="w-[42px] h-[42px] rounded-[9000px] bg-[#BAF400] p-3 flex items-center justify-center">
+            <p class="text-white">B</p>
+          </button>
+          <p class="text-xl leading-[1.4] text-white">23.3. 2023</p>
+          <button class="w-[42px] h-[42px] rounded-[9000px] bg-[#D9DBE9] p-3 flex items-center justify-center opacity-40">
+            <p>B</p>
+          </button>
         </div>
       </div>
+      <div class="flex gap-3">
+        <button class="font-euclid_circular_a inline-flex items-center justify-center gap-3 rounded-[9000px] bg-[#14142B] px-4 py-2.5 font-normal text-[#FCFCFC] transition-all">
+          <p class="text-sm leading-normal">Graf</p>
+        </button>
+        <button class="font-euclid_circular_a inline-flex items-center justify-center gap-3 rounded-[9000px] bg-[#BAF400] px-4 py-2.5 font-normal text-[#14142B] transition-all">
+          <p class="text-sm leading-normal">Tabulka</p>
+        </button>
+      </div>
     </div>
-    <canvas id="chart" class="chartjs-render-monitor"></canvas>
+    <!-- Rámeček -->
+<!-- Rámeček -->
+<div class="flex justify-between items-start mt-4 px-8 py-4 bg-[#004852] rounded-[16px]">
+    <!-- První část rámečku -->
+    <div class=" pr-4">
+        <p class="text-[#baf400] transform -rotate-1 text-left align-top text-2xl font-[Euclid Circular A] tracking-tighter leading-[40px] border-style-none outline-none w-[117px]">
+            Cena / Mwh
+          </p>
+          <p class="text-[#ffffff] transform -rotate-1 text-left align-top text-base font-[Euclid Circular A] leading-[10px] border-style-none outline-none ">
+            Denni min
+          </p>
+          <p class="text-[#baf400] transform -rotate-1 text-left align-top text-base font-[Euclid Circular A] leading-[30px] border-style-none outline-none">
+            Casove rozmezi
+          </p>
+    </div>
+    <!-- Druhá část rámečku -->
+    <div class=" px-4">
+        <p class="text-[#baf400] transform -rotate-1 text-left align-top text-2xl font-[Euclid Circular A] tracking-tighter leading-[40px] border-style-none outline-none w-[117px]">
+            Cena / Mwh
+          </p>
+          <p class="text-[#ffffff] transform -rotate-1 text-left align-top text-base font-[Euclid Circular A] leading-[10px] border-style-none outline-none ">
+            Denni min
+          </p>
+          <p class="text-[#baf400] transform -rotate-1 text-left align-top text-base font-[Euclid Circular A] leading-[30px] border-style-none outline-none">
+            Casove rozmezi
+          </p>
+    </div>
+    <!-- Třetí část rámečku -->
+    <div class="px-4">
+        <p class="text-[#baf400] transform -rotate-1 text-left align-top text-2xl font-[Euclid Circular A] tracking-tighter leading-[40px] border-style-none outline-none w-[117px]">
+            Cena / Mwh
+          </p>
+          <p class="text-[#ffffff] transform -rotate-1 text-left align-top text-base font-[Euclid Circular A] leading-[10px] border-style-none outline-none ">
+            Denni min
+          </p>
+          <p class="text-[#baf400] transform -rotate-1 text-left align-top text-base font-[Euclid Circular A] leading-[30px] border-style-none outline-none">
+            Casove rozmezi
+          </p>
+    </div>
   </div>
-</main>
-
+  
+  
+    <!-- Dolní část -->
+    <div class="flex justify-between items-start py-4">
+      <div class="w-[300px]">
+        
+      </div>
+    </div>
+  </div>
+</div>
