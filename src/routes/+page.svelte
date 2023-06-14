@@ -65,7 +65,7 @@
   </div>
   
   
-    <!-- Dolní část -->
+    <!-- Dolní část graf -->
     <div class="flex justify-between items-start py-4">
       <div class="w-[300px]">
         
