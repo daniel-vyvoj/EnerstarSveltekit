@@ -1,11 +1,10 @@
 <script lang="ts">
 import { onMount } from 'svelte';
-  import Chart from 'chart.js/auto';
+import Chart from 'chart.js/auto';
 
+let currentTime = getCurrentTime();
 
-  let currentTime = getCurrentTime();
-
-  function getCurrentTime() {
+function getCurrentTime() {
   const date = new Date();
   const hours = String(date.getHours()).padStart(2, '0');
   const minutes = String(date.getMinutes()).padStart(2, '0');
@@ -13,148 +12,159 @@ import { onMount } from 'svelte';
   return `${hours}:${minutes}:${seconds}`;
 }
 
-// Aktualizace času každou sekundu
-setInterval(() => {
-  currentTime = getCurrentTime();
-}, 1000);
-
-  let data: any[] = [];
-  let dailyMin = '';
-  let currentPrice = '';
-  let dailyMax = '';
-
-  onMount(async () => {
-    try {
-      const response = await fetch('/src/DataCen.json');
-      data = await response.json();
-
-      dailyMin = calculateDailyMin(data);
-      currentPrice = calculateCurrentPrice(data);
-      dailyMax = calculateDailyMax(data);
-
-      renderChart();
-    } catch (error) {
-      console.error('Chyba při načítání dat:', error);
-    }
-  });
-
-  function renderChart() {
-    const chartData = {
-      labels: data.map((item) => item.Hodina),
-      datasets: [
-        {
-          label: 'Ceny za 24 hodin',
-          data: data.map((item) => {
-            const priceEuro = parseFloat(item['Eur/MWH']);
-            const exchangeRate = 25; // Předpokládaný kurz EUR/CZK
-            const priceCZK = priceEuro * exchangeRate;
-            return priceCZK;
-          }),
-          backgroundColor: data.map((item) => {
-            const price = parseFloat(item['Eur/MWH']);
-            if (price >= 0) {
-              return '#8DC63F'; // Zelená barva pro pozitivní ceny
-            } else {
-              return '#FF5C60'; // Červená barva pro negativní ceny
-            }
-          }),
-          borderColor: '#000000',
-          borderWidth: 1,
-          borderRadius: 8,
-        },
-      ],
-    };
-
-    const chartOptions = {
-      responsive: true,
-      scales: {
-        y: {
-          beginAtZero: true,
-        },
-      },
-      plugins: {
-        tooltip: {
-          enabled: true, // Vypnutí tooltipu
-        },
-        legend: {
-          display: true, // Skrytí legendy
-        },
-        annotation: {
-          annotations: [
-            {
-              type: 'line',
-              mode: 'horizontal',
-              scaleID: 'y',
-              value: parseFloat(dailyMin),
-              borderColor: '#baf400',
-              borderWidth: 1,
-              label: {
-                enabled: true,
-                content: dailyMin,
-                backgroundColor: 'transparent',
-                font: {
-                  family: 'Euclid Circular A',
-                  size: 12,
-                  weight: 500,
-                  color: '#baf400',
-                },
-                yAdjust: -12, // Posunutí textu nahoru
-              },
-            },
-            {
-              type: 'line',
-              mode: 'horizontal',
-              scaleID: 'y',
-              value: parseFloat(currentPrice),
-              borderColor: '#baf400',
-              borderWidth: 1,
-              label: {
-                enabled: true,
-                content: currentPrice,
-                backgroundColor: 'transparent',
-                font: {
-                  family: 'Euclid Circular A',
-                  size: 12,
-                  weight: 500,
-                  color: '#baf400',
-                },
-                yAdjust: -12, // Posunutí textu nahoru
-              },
-            },
-            {
-              type: 'line',
-              mode: 'horizontal',
-              scaleID: 'y',
-              value: parseFloat(dailyMax),
-              borderColor: '#baf400',
-              borderWidth: 1,
-              label: {
-                enabled: true,
-                content: dailyMax,
-                backgroundColor: 'transparent',
-                font: {
-                  family: 'Euclid Circular A',
-                  size: 12,
-                  weight: 500,
-                  color: '#baf400',
-                },
-                yAdjust: -12, // Posunutí textu nahoru
-              },
-            },
-          ],
-        },
-      },
-    };
-
-    const ctx = document.getElementById('chart');
-    if (ctx) {
-      new Chart(ctx, {
-        type: 'bar',
-        data: chartData,
-        options: chartOptions,
-      });
-    }
+function transformChartData(data: any[]) {
+  const transformedData = [];
+  for (let i = 0; i < data.length - 1; i++) {
+    transformedData.push(data[i]);
+    transformedData.push({
+      Hodina: '',
+      'Eur/MWH': 0,
+    });
   }
+  transformedData.push(data[data.length - 1]);
+  return transformedData;
+}
+
+let data: any[] = [];
+let dailyMin = '';
+let currentPrice = '';
+let dailyMax = '';
+
+onMount(async () => {
+  try {
+    const response = await fetch('/src/DataCen.json');
+    const originalData = await response.json();
+    data = transformChartData(originalData);
+
+    dailyMin = calculateDailyMin(originalData);
+    currentPrice = calculateCurrentPrice(originalData);
+    dailyMax = calculateDailyMax(originalData);
+
+    renderChart();
+  } catch (error) {
+    console.error('Chyba při načítání dat:', error);
+  }
+});
+
+function renderChart() {
+  const chartData = {
+    labels: data.map((item) => item.Hodina),
+    datasets: [
+      {
+        label: 'Ceny za 24 hodin',
+        data: data.map((item) => {
+          const priceEuro = parseFloat(item['Eur/MWH']);
+          const exchangeRate = 25; // Předpokládaný kurz EUR/CZK
+          const priceCZK = priceEuro * exchangeRate;
+          return priceCZK;
+        }),
+        backgroundColor: data.map((item) => {
+          const price = parseFloat(item['Eur/MWH']);
+          if (price >= 0) {
+            return '#8DC63F'; // Zelená barva pro pozitivní ceny
+          } else {
+            return '#FF5C60'; // Červená barva pro negativní ceny
+          }
+        }),
+        borderColor: '#000000',
+        borderWidth: 1,
+        borderRadius: 8,
+      },
+    ],
+  };
+
+  const chartOptions = {
+    responsive: true,
+    scales: {
+      y: {
+        beginAtZero: true,
+      },
+    },
+    plugins: {
+      tooltip: {
+        enabled: true, // Vypnutí tooltipu
+      },
+      legend: {
+        display: true, // Skrytí legendy
+      },
+      annotation: {
+        annotations: [
+          {
+            type: 'line',
+            mode: 'horizontal',
+            scaleID: 'y',
+            value: parseFloat(dailyMin),
+            borderColor: '#baf400',
+            borderWidth: 1,
+            label: {
+              enabled: true,
+              content: dailyMin,
+              backgroundColor: 'transparent',
+              font: {
+                family: 'Euclid Circular A',
+                size: 12,
+                weight: 500,
+                color: '#baf400',
+              },
+              yAdjust: -12, // Posunutí textu nahoru
+            },
+          },
+          {
+            type: 'line',
+            mode: 'horizontal',
+            scaleID: 'y',
+            value: parseFloat(currentPrice),
+            borderColor: '#000000',
+            borderWidth: 1,
+            label: {
+              enabled: true,
+              content: currentPrice,
+              backgroundColor: 'transparent',
+              font: {
+                family: 'Euclid Circular A',
+                size: 12,
+                weight: 500,
+                color: '#000000',
+              },
+              yAdjust: -12,
+            },
+          },
+          {
+            type: 'line',
+            mode: 'horizontal',
+            scaleID: 'y',
+            value: parseFloat(dailyMax),
+            borderColor: '#ff0000',
+            borderWidth: 1,
+            label: {
+              enabled: true,
+              content: dailyMax,
+              backgroundColor: 'transparent',
+              font: {
+                family: 'Euclid Circular A',
+                size: 12,
+                weight: 500,
+                color: '#ff0000',
+              },
+              yAdjust: -12,
+            },
+          },
+        ],
+      },
+    },
+  };
+
+  const chartConfig = {
+    type: 'bar',
+    data: chartData,
+    options: chartOptions,
+  };
+
+  const ctx = document.getElementById('chartCanvas');
+  if (ctx) {
+    new Chart(ctx, chartConfig);
+  }
+}
 
   function calculateDailyMin(data: any[]) {
     const prices = data.map((item) => parseFloat(item['Eur/MWH']));
@@ -244,7 +254,7 @@ setInterval(() => {
     <!-- Dolní část graf -->
     <div class="flex justify-between items-start py-4">
       <div class="w-[1020px]">
-        <canvas id="chart" class="h-[44px]"></canvas>
+        <canvas id="chartCanvas" class="h-[44px]"></canvas>
       </div>
     </div>
   </div>
