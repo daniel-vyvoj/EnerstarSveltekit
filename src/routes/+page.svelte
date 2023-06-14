@@ -185,23 +185,32 @@ function renderChart() {
   }
 }
 
-  function calculateDailyMin(data: any[]) {
-    const prices = data.map((item) => parseFloat(item['EurMWH']));
-    const minPrice = Math.min(...prices);
-    return minPrice.toFixed(2);
-  }
+function convertToCZK(priceEUR: number): string {
+  const conversionRate = 25; // Předpokládaný konverzní kurz z eur na koruny
+  const priceCZK = priceEUR * conversionRate;
+  return priceCZK.toFixed(2);
+}
 
-  function calculateCurrentPrice(data: any[]) {
-    const currentHour = new Date().getHours();
-    const currentPrice = parseFloat(data[currentHour - 1]['EurMWH']);
-    return currentPrice.toFixed(2);
-  }
+function calculateDailyMin(data: any[]): string {
+  const prices = data.map((item) => parseFloat(item['EurMWH']));
+  const minPrice = Math.min(...prices);
+  const minPriceCZK = convertToCZK(minPrice);
+  return minPriceCZK;
+}
 
-  function calculateDailyMax(data: any[]) {
-    const prices = data.map((item) => parseFloat(item['EurMWH']));
-    const maxPrice = Math.max(...prices);
-    return maxPrice.toFixed(2);
-  }
+function calculateCurrentPrice(data: any[]): string {
+  const currentHour = new Date().getHours();
+  const currentPrice = parseFloat(data[currentHour - 1]['EurMWH']);
+  const currentPriceCZK = convertToCZK(currentPrice);
+  return currentPriceCZK;
+}
+
+function calculateDailyMax(data: any[]): string {
+  const prices = data.map((item) => parseFloat(item['EurMWH']));
+  const maxPrice = Math.max(...prices);
+  const maxPriceCZK = convertToCZK(maxPrice);
+  return maxPriceCZK;
+}
 </script>
 <div class="flex justify-center items-center h-screen">
   <div class="table bg-[#003941] h-[544px] w-[1020px] rounded-[56px] px-5 py-5">
@@ -239,10 +248,10 @@ function renderChart() {
     <!-- První část rámečku -->
     <div class=" pr-4">
         <p class="text-[#baf400] transform  text-left align-top text-2xl font-[Euclid Circular A]  w-[117px]">
-          {dailyMin}
+          {dailyMin} Kč
           </p>
           <p class="text-[#ffffff] transform  text-left align-top text-base font-[Euclid Circular A]">
-            Denni min
+            Denní min
           </p>
           <p class="text-[#baf400] transform  text-left align-top text-base font-[Euclid Circular A] ">
             Casove rozmezi
@@ -251,10 +260,10 @@ function renderChart() {
     <!-- Druhá část rámečku -->
     <div class=" px-4">
         <p class="text-[#baf400] transform  text-left align-top text-2xl font-[Euclid Circular A] tracking-tighter leading-[40px] w-[117px]">
-          {currentPrice}
+          {currentPrice} Kč
           </p>
           <p class="text-[#ffffff] transform text-left align-top text-base font-[Euclid Circular A] leading-[10px] ">
-            Aktualni cena
+            Aktualní cena
           </p>
           <p class="text-[#baf400] transform text-left align-top text-base font-[Euclid Circular A] leading-[30px]">
             Casove rozmezi
@@ -263,10 +272,10 @@ function renderChart() {
     <!-- Třetí část rámečku -->
     <div class="px-4">
         <p class="text-[#baf400] transform  text-left align-top text-2xl font-[Euclid Circular A] tracking-tighter leading-[40px] w-[117px]">
-          {dailyMax}
+          {dailyMax} Kč
           </p>
           <p class="text-[#ffffff] transform  text-left align-top text-base font-[Euclid Circular A] leading-[10px]">
-            Denni max
+            Denní max
           </p>
           <p class="text-[#baf400] transform  text-left align-top text-base font-[Euclid Circular A] leading-[30px]">
             Casove rozmezi
