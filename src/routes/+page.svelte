@@ -27,6 +27,10 @@ function getCurrentTime() {
   return `${hours}:${minutes}:${seconds}`;
 }
 
+setInterval(() => {
+  currentTime = getCurrentTime ();
+}, 1000); // Aktualizovat čas každou sekundu (1000 ms)
+
 function transformChartData(data: any[]) {
   const transformedData = [];
   for (let i = 0; i < data.length - 1; i++) {
