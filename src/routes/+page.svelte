@@ -83,7 +83,7 @@ function renderChart() {
             return '#FF5C60'; // Červená barva pro negativní ceny
           }
         }),
-        borderColor: '#000000',
+        borderColor: '#baf400',
         borderWidth: 1,
         borderRadius: 8,
       },
@@ -102,7 +102,9 @@ function renderChart() {
         enabled: true, // Vypnutí tooltipu
       },
       legend: {
-        display: true, // Skrytí legendy
+        display: true, labels: {
+      color: '#baf400', // Barva textu legendy
+    }, // Skrytí legendy
       },
       annotation: {
         annotations: [
@@ -141,7 +143,7 @@ function renderChart() {
                 family: 'Euclid Circular A',
                 size: 12,
                 weight: 500,
-                color: '#000000',
+                color: '#baf400',
               },
               yAdjust: -12,
             },
@@ -151,7 +153,7 @@ function renderChart() {
             mode: 'horizontal',
             scaleID: 'y',
             value: parseFloat(dailyMax),
-            borderColor: '#ff0000',
+            borderColor: '#baf400',
             borderWidth: 1,
             label: {
               enabled: true,
@@ -209,11 +211,15 @@ function renderChart() {
         <p class="font-euclid_circular_a text-xl leading-[1.4] text-white">Spotové ceny</p>
         <div class="flex gap-6">
           <button class="w-[42px] h-[42px] rounded-[9000px] bg-[#BAF400] p-3 flex items-center justify-center">
-            <p class="text-white">B</p>
+            <svg width="9" height="16" viewBox="0 0 9 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M7.96313 1L0.999962 7.96317L7.96313 14.9263" stroke="#14142B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
           </button>
           <p class="text-xl leading-[1.4] text-white">23.3. 2023</p>
           <button class="w-[42px] h-[42px] rounded-[9000px] bg-[#D9DBE9] p-3 flex items-center justify-center opacity-40">
-            <p>B</p>
+            <svg width="9" height="16" viewBox="0 0 9 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 1L7.96317 7.96317L1 14.9263" stroke="#14142B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
           </button>
         </div>
       </div>
