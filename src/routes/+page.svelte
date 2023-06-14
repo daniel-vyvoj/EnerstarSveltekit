@@ -232,37 +232,37 @@ function renderChart() {
 <div class="flex justify-between items-start mt-4 px-8 py-4 bg-[#004852] rounded-[16px]">
     <!-- První část rámečku -->
     <div class=" pr-4">
-        <p class="text-[#baf400] transform -rotate-1 text-left align-top text-2xl font-[Euclid Circular A] tracking-tighter leading-[40px] border-style-none outline-none w-[117px]">
+        <p class="text-[#baf400] transform  text-left align-top text-2xl font-[Euclid Circular A]  w-[117px]">
           {dailyMin}
           </p>
-          <p class="text-[#ffffff] transform -rotate-1 text-left align-top text-base font-[Euclid Circular A] leading-[10px] border-style-none outline-none ">
+          <p class="text-[#ffffff] transform  text-left align-top text-base font-[Euclid Circular A]">
             Denni min
           </p>
-          <p class="text-[#baf400] transform -rotate-1 text-left align-top text-base font-[Euclid Circular A] leading-[30px] border-style-none outline-none">
+          <p class="text-[#baf400] transform  text-left align-top text-base font-[Euclid Circular A] ">
             Casove rozmezi
           </p>
     </div>
     <!-- Druhá část rámečku -->
     <div class=" px-4">
-        <p class="text-[#baf400] transform -rotate-1 text-left align-top text-2xl font-[Euclid Circular A] tracking-tighter leading-[40px] border-style-none outline-none w-[117px]">
+        <p class="text-[#baf400] transform  text-left align-top text-2xl font-[Euclid Circular A] tracking-tighter leading-[40px] w-[117px]">
           {currentPrice}
           </p>
-          <p class="text-[#ffffff] transform -rotate-1 text-left align-top text-base font-[Euclid Circular A] leading-[10px] border-style-none outline-none ">
+          <p class="text-[#ffffff] transform text-left align-top text-base font-[Euclid Circular A] leading-[10px] ">
             Aktualni cena
           </p>
-          <p class="text-[#baf400] transform -rotate-1 text-left align-top text-base font-[Euclid Circular A] leading-[30px] border-style-none outline-none">
+          <p class="text-[#baf400] transform text-left align-top text-base font-[Euclid Circular A] leading-[30px]">
             Casove rozmezi
           </p>
     </div>
     <!-- Třetí část rámečku -->
     <div class="px-4">
-        <p class="text-[#baf400] transform -rotate-1 text-left align-top text-2xl font-[Euclid Circular A] tracking-tighter leading-[40px] border-style-none outline-none w-[117px]">
+        <p class="text-[#baf400] transform  text-left align-top text-2xl font-[Euclid Circular A] tracking-tighter leading-[40px] w-[117px]">
           {dailyMax}
           </p>
-          <p class="text-[#ffffff] transform -rotate-1 text-left align-top text-base font-[Euclid Circular A] leading-[10px] border-style-none outline-none ">
+          <p class="text-[#ffffff] transform  text-left align-top text-base font-[Euclid Circular A] leading-[10px]">
             Denni max
           </p>
-          <p class="text-[#baf400] transform -rotate-1 text-left align-top text-base font-[Euclid Circular A] leading-[30px] border-style-none outline-none">
+          <p class="text-[#baf400] transform  text-left align-top text-base font-[Euclid Circular A] leading-[30px]">
             Casove rozmezi
           </p>
     </div>
