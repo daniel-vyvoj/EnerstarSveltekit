@@ -247,7 +247,7 @@ function calculateDailyMax(data: any[]): string {
       </div>
     </div>
     <!-- Rámeček -->
-<!-- Rámeček -->
+  <!-- Rámeček -->
 <div class="flex justify-between items-start mt-4 px-8 py-4 bg-[#004852] rounded-[16px]">
     <!-- První část rámečku -->
     <div class=" pr-4">
