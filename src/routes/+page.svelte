@@ -1,6 +1,21 @@
 <script lang="ts">
 import { onMount } from 'svelte';
 import Chart from 'chart.js/auto';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/database';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAh5RVRAAmRT8UwIogGlY2AtDZUKcULFgk",
+    authDomain: "enerstav.firebaseapp.com",
+    databaseURL: "https://enerstav-default-rtdb.firebaseio.com",
+    projectId: "enerstav",
+    storageBucket: "enerstav.appspot.com",
+    messagingSenderId: "101325697125",
+    appId: "1:101325697125:web:53b25088da1a466a46168c"
+};
+
+// Inicializace Firebase
+firebase.initializeApp(firebaseConfig);
 
 let currentTime = getCurrentTime();
 
@@ -32,8 +47,10 @@ let dailyMax = '';
 
 onMount(async () => {
   try {
-    const response = await fetch('/src/data.json');
-    const originalData = await response.json();
+    // Načtení dat z Firebase Realtime Database
+    const reference = firebase.database().ref('/Data');
+    const snapshot = await reference.once('value');
+    const originalData = snapshot.val();
     data = transformChartData(originalData);
 
     dailyMin = calculateDailyMin(originalData);
@@ -48,18 +65,18 @@ onMount(async () => {
 
 function renderChart() {
   const chartData = {
-    labels: data.map((item) => item.Hodina),
+    labels: data.map((item) => item.hodina),
     datasets: [
       {
         label: 'Ceny za 24 hodin',
         data: data.map((item) => {
-          const priceEuro = parseFloat(item['Eur/MWH']);
+          const priceEuro = parseFloat(item['EurMWH']);
           const exchangeRate = 25; // Předpokládaný kurz EUR/CZK
           const priceCZK = priceEuro * exchangeRate;
           return priceCZK;
         }),
         backgroundColor: data.map((item) => {
-          const price = parseFloat(item['Eur/MWH']);
+          const price = parseFloat(item['EurMWH']);
           if (price >= 0) {
             return '#8DC63F'; // Zelená barva pro pozitivní ceny
           } else {
@@ -167,19 +184,19 @@ function renderChart() {
 }
 
   function calculateDailyMin(data: any[]) {
-    const prices = data.map((item) => parseFloat(item['Eur/MWH']));
+    const prices = data.map((item) => parseFloat(item['EurMWH']));
     const minPrice = Math.min(...prices);
     return minPrice.toFixed(2);
   }
 
   function calculateCurrentPrice(data: any[]) {
     const currentHour = new Date().getHours();
-    const currentPrice = parseFloat(data[currentHour - 1]['Eur/MWH']);
+    const currentPrice = parseFloat(data[currentHour - 1]['EurMWH']);
     return currentPrice.toFixed(2);
   }
 
   function calculateDailyMax(data: any[]) {
-    const prices = data.map((item) => parseFloat(item['Eur/MWH']));
+    const prices = data.map((item) => parseFloat(item['EurMWH']));
     const maxPrice = Math.max(...prices);
     return maxPrice.toFixed(2);
   }
