@@ -25,7 +25,7 @@ setInterval(() => {
 
   onMount(async () => {
     try {
-      const response = await fetch('/DataCen.json');
+      const response = await fetch('/src/DataCen.json');
       data = await response.json();
 
       dailyMin = calculateDailyMin(data);
@@ -283,10 +283,15 @@ setInterval(() => {
         <p class="caption">Denní max</p>
         <p class="time">15:00 - 16:00</p>
       </div>
-      <div>
+      <div class="flex flex-col items-center justify-center">
         <p class="time">Aktuální čas: {currentTime}</p>
+        <div class="flex gap-2">
+          <button class="button-right bg-green-500 rounded-full text-white" style="background-color: #14142B; padding: 4px 12px;">GRAF</button>
+          <button class="button-right bg-green-500 rounded-full" style="background-color: #BAF400; padding: 4px 12px;">Tabulka</button>
+        </div>
       </div>
     </div>
     <canvas id="chart" class="chartjs-render-monitor"></canvas>
   </div>
 </main>
+
